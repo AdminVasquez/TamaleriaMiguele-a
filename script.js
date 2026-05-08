@@ -142,6 +142,15 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', function () {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     this.classList.add('active');
+    const filtro = this.textContent.toLowerCase().trim();
+    document.querySelectorAll('.menu-item').forEach(item => {
+      const cat = item.getAttribute('data-categoria');
+      if (filtro === 'todos' || cat === filtro || cat + 's' === filtro) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
   });
 });
 
@@ -190,7 +199,17 @@ ${items}
 
 💰 *Total: $${total.toFixed(2)}*`;
 
-  window.open(`https://wa.me/50370000000?text=${encodeURIComponent(mensaje)}`, '_blank');
+// Número según tipo de entrega y sucursal
+  let numero = '50370000000'; // ← NÚMERO GLOBAL (domicilio)
+
+  if (entrega.getAttribute('data-val') === 'local') {
+    if (local.includes('Barrios'))        numero = '50371111111'; // ← BARRIOS
+    else if (local.includes('Plaza'))     numero = '50372222222'; // ← PLAZA JARDÍN
+    else if (local.includes('Encuentro')) numero = '50373333333'; // ← EL ENCUENTRO
+    else if (local.includes('Ciudad'))    numero = '50374444444'; // ← CIUDAD REAL
+  }
+
+  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
 });
 
 // SMOOTH SCROLL
@@ -204,3 +223,69 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 const styleEl = document.createElement('style');
 styleEl.textContent = '#carrito-panel.open { right: 0 !important; }';
 document.head.appendChild(styleEl);
+
+// BUSCADOR
+const platos = [
+  { nombre: 'Tamal de Pollo',           precio: 0.75, seccion: '#menu' },
+  { nombre: 'Tamal de Puerco',          precio: 0.75, seccion: '#menu' },
+  { nombre: 'Tamal de Frijol',          precio: 0.60, seccion: '#menu' },
+  { nombre: 'Tamal de Rajas',           precio: 0.85, seccion: '#menu' },
+  { nombre: 'Tamal Dulce',              precio: 0.65, seccion: '#menu' },
+  { nombre: 'Docena Surtida',           precio: 8.50, seccion: '#menu' },
+  { nombre: 'Tamal Migueleño Especial', precio: 1.00, seccion: '#especialidades' },
+  { nombre: 'El Gran Migueleño',        precio: 1.50, seccion: '#especialidades' },
+  { nombre: 'Tamal Navideño',           precio: 1.00, seccion: '#especialidades' },
+];
+
+function toggleBuscador() {
+  const wrap = document.getElementById('buscador-wrap');
+  const input = document.getElementById('buscador-input');
+  const abierto = wrap.style.display === 'flex';
+  wrap.style.display = abierto ? 'none' : 'flex';
+  if (!abierto) { input.focus(); input.value = ''; document.getElementById('buscador-resultados').style.display = 'none'; }
+}
+
+function buscarPlato(query) {
+  const resultados = document.getElementById('buscador-resultados');
+  const resultadosMobile = document.getElementById('buscador-resultados-mobile');
+
+  if (!query.trim()) {
+    if (resultados) resultados.style.display = 'none';
+    if (resultadosMobile) resultadosMobile.style.display = 'none';
+    return;
+  }
+
+  const encontrados = platos.filter(p => p.nombre.toLowerCase().includes(query.toLowerCase()));
+  const html = encontrados.length === 0
+    ? '<div style="padding:1rem;font-size:0.82rem;color:rgba(245,240,232,0.4);">No se encontraron resultados</div>'
+    : encontrados.map(p => `
+      <div onclick="seleccionarPlato('${p.nombre}',${p.precio},'${p.seccion}')"
+        style="display:flex;justify-content:space-between;align-items:center;padding:0.8rem 1rem;cursor:pointer;border-bottom:1px solid rgba(245,240,232,0.06);transition:background 0.2s;"
+        onmouseover="this.style.background='rgba(77,175,74,0.1)'"
+        onmouseout="this.style.background='transparent'">
+        <span style="font-size:0.85rem;color:var(--crema);">🫔 ${p.nombre}</span>
+        <span style="font-size:0.82rem;color:var(--verde-claro);font-weight:600;">$${p.precio.toFixed(2)}</span>
+      </div>`).join('');
+
+  if (resultados) { resultados.innerHTML = html; resultados.style.display = 'block'; }
+  if (resultadosMobile) { resultadosMobile.innerHTML = html; resultadosMobile.style.display = 'block'; }
+}
+
+function seleccionarPlato(nombre, precio, seccion) {
+  agregarAlCarrito(nombre, precio);
+  if (document.getElementById('buscador-resultados')) document.getElementById('buscador-resultados').style.display = 'none';
+  if (document.getElementById('buscador-resultados-mobile')) document.getElementById('buscador-resultados-mobile').style.display = 'none';
+  if (document.getElementById('buscador-input')) { document.getElementById('buscador-input').value = ''; document.getElementById('buscador-wrap').style.display = 'none'; }
+  hamburger.classList.remove('open');
+  mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+  document.querySelector(seccion).scrollIntoView({ behavior: 'smooth' });
+}
+
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('buscador-wrap');
+  if (!wrap) return;
+  if (!wrap.contains(e.target) && !e.target.getAttribute('onclick')?.includes('toggleBuscador')) {
+    wrap.style.display = 'none';
+  }
+});

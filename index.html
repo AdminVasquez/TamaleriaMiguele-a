@@ -37,16 +37,24 @@
     🛒 Carrito
     <span id="carrito-badge" style="display:none;position:absolute;top:-8px;right:-8px;background:var(--verde-brillante);color:var(--negro);width:20px;height:20px;border-radius:50%;font-size:0.65rem;font-weight:700;align-items:center;justify-content:center;">0</span>
   </button>
+  <div id="buscador-wrap" style="position:relative;display:none;">
+    <input id="buscador-input" type="text" placeholder="Buscar tamal..." oninput="buscarPlato(this.value)" style="background:rgba(245,240,232,0.06);border:1px solid rgba(77,175,74,0.3);color:var(--crema);padding:0.5rem 1rem;border-radius:4px;font-family:'Montserrat',sans-serif;font-size:0.78rem;outline:none;width:200px;">
+    <div id="buscador-resultados" style="display:none;position:absolute;top:110%;left:0;width:280px;background:#111;border:1px solid rgba(77,175,74,0.3);border-radius:4px;z-index:3000;overflow:hidden;"></div>
+  </div>
+  <button onclick="toggleBuscador()" style="background:transparent;border:1px solid rgba(77,175,74,0.3);border-radius:4px;padding:0.5rem 0.7rem;color:var(--verde-claro);cursor:pointer;font-size:1rem;flex-shrink:0;">🔍</button>
   <button class="hamburger" id="hamburger" aria-label="Abrir menú">
     <span></span><span></span><span></span>
   </button>
 </nav>
-
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
-  <div class="mobile-menu-bg"></div>
+ <div class="mobile-menu-bg"></div>
   <div class="mobile-menu-pattern"></div>
   <button onclick="hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); document.body.style.overflow='';" style="position:absolute;top:1.5rem;right:1.5rem;background:rgba(26,77,26,0.6);border:1px solid rgba(77,175,74,0.4);color:var(--verde-claro);width:44px;height:44px;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;">✕</button>
+  <div style="width:100%;max-width:340px;position:relative;z-index:1;margin-bottom:1rem;">
+    <input type="text" placeholder="🔍 Buscar tamal..." oninput="buscarPlato(this.value)" style="width:100%;background:rgba(245,240,232,0.06);border:1px solid rgba(77,175,74,0.3);color:var(--crema);padding:0.8rem 1rem;border-radius:4px;font-family:'Montserrat',sans-serif;font-size:0.85rem;outline:none;">
+    <div id="buscador-resultados-mobile" style="display:none;position:relative;top:0;left:0;width:100%;background:#111;border:1px solid rgba(77,175,74,0.3);border-radius:4px;z-index:3000;overflow:hidden;margin-top:0.5rem;"></div>
+  </div>
   <ul class="mobile-nav-links">
     <li><a href="#nosotros" class="mobile-link">Nosotros <span class="mobile-nav-arrow">→</span></a></li>
     <li><a href="#menu" class="mobile-link">Menú <span class="mobile-nav-arrow">→</span></a></li>
@@ -198,7 +206,7 @@
     </div>
   </div>
   <div class="menu-grid">
-    <div class="menu-item reveal">
+    <div class="menu-item reveal" data-categoria="salado">
       <span class="menu-icon">🍗</span>
       <div class="menu-item-top">
         <span class="menu-badge">Más Popular</span>
@@ -208,7 +216,7 @@
       <div class="menu-desc">Masa de maíz suave rellena de pollo guisado en salsa criolla con chile y especias. Envuelto en hoja de plátano.</div>
     <button class="btn-agregar" onclick="agregarAlCarrito('Tamal de Pollo',0.75)">+ Agregar al carrito</button>
     </div>
-    <div class="menu-item reveal">
+    <div class="menu-item reveal" data-categoria="dulce">
       <span class="menu-icon">🥩</span>
       <div class="menu-item-top">
         <span class="menu-badge">Tradicional</span>
