@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barrios San Miguel — Tamalería Migueleña</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .suc-hero {
+    min-height: 40vh; display: flex; align-items: flex-end;
+    position: relative; overflow: hidden; padding: 0 5% 3rem;
+    background: linear-gradient(135deg, #050505 0%, #0a1a0a 60%, #0d2a0d 100%);
+    margin-top: 80px;
+  }
+  .suc-hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at 70% 30%, rgba(45,122,45,0.18) 0%, transparent 60%);
+  }
+  .suc-hero-pattern {
+    position: absolute; inset: 0; opacity: 0.04; pointer-events: none;
+    background-image: repeating-linear-gradient(45deg, var(--verde-brillante) 0, var(--verde-brillante) 1px, transparent 0, transparent 50%);
+    background-size: 30px 30px;
+  }
+  .suc-hero-content { position: relative; z-index: 1; }
+  .suc-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none; color: rgba(245,240,232,0.5);
+    font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 1.5rem; transition: color 0.3s;
+  }
+  .suc-back:hover { color: var(--verde-claro); }
+  .suc-tag { font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase; color: var(--verde-brillante); font-weight: 600; margin-bottom: 0.5rem; }
+  .suc-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 900; color: var(--blanco); line-height: 1; }
+  .suc-title span { color: var(--verde-brillante); }
+
+  .suc-body { padding: 4rem 5%; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .suc-info { display: flex; flex-direction: column; gap: 1.5rem; }
+  .suc-info-card { background: rgba(245,240,232,0.02); border: 1px solid rgba(245,240,232,0.07); border-radius: 4px; padding: 1.5rem; display: flex; align-items: flex-start; gap: 1rem; transition: all 0.3s; }
+  .suc-info-card:hover { border-color: rgba(77,175,74,0.3); background: rgba(45,122,45,0.05); }
+  .suc-info-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--verde-oscuro); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .suc-info-label { font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,240,232,0.4); margin-bottom: 0.2rem; }
+  .suc-info-val { font-size: 0.95rem; color: var(--crema); font-weight: 500; line-height: 1.5; }
+  .suc-map-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--verde-medio); border: none; color: var(--crema); text-decoration: none; padding: 1rem 1.8rem; font-family: 'Montserrat', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 2px; transition: all 0.3s; position: relative; overflow: hidden; }
+  .suc-map-btn::before { content: ''; position: absolute; inset: 0; background: var(--verde-brillante); transform: scaleX(0); transform-origin: left; transition: transform 0.35s; }
+  .suc-map-btn:hover::before { transform: scaleX(1); }
+  .suc-map-btn:hover { color: var(--negro); }
+  .suc-map-btn span { position: relative; z-index: 1; }
+
+  .suc-map { position: relative; }
+  .suc-map iframe { width: 100%; height: 380px; border: none; border-radius: 4px; border: 1px solid rgba(77,175,74,0.2); }
+
+  .suc-gallery-section { padding: 0 5% 4rem; }
+  .suc-gallery-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--blanco); margin-bottom: 1.5rem; }
+  .suc-gallery-title em { color: var(--verde-brillante); font-style: normal; }
+  .suc-gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .suc-gal-item { position: relative; overflow: hidden; border-radius: 4px; cursor: pointer; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; font-size: 4rem; transition: transform 0.4s; }
+  .suc-gal-item:first-child { grid-column: span 2; aspect-ratio: 16/9; font-size: 6rem; }
+  .suc-gal-item:hover { transform: scale(1.02); }
+  .suc-gal-overlay { position: absolute; inset: 0; background: rgba(10,10,10,0.4); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 1rem; }
+  .suc-gal-item:hover .suc-gal-overlay { opacity: 1; }
+  .suc-gal-label { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--blanco); }
+
+  .suc-pedido { margin: 0 5% 4rem; background: var(--verde-oscuro); border: 1px solid rgba(77,175,74,0.3); border-radius: 4px; padding: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+  .suc-pedido-text { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--blanco); }
+  .suc-pedido-text span { color: var(--verde-brillante); }
+
+  @media (max-width: 900px) {
+    .suc-body { grid-template-columns: 1fr; }
+    .suc-map iframe { height: 260px; }
+    .suc-gallery-grid { grid-template-columns: 1fr 1fr; }
+    .suc-gal-item:first-child { grid-column: span 2; }
+    .suc-pedido { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="scrolled">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon" style="background:transparent;border:none;padding:0;width:48px;height:48px;">
+      <img src="LOGO-TAMALERIA LA MIGUELEÑA.png" style="width:100%;height:100%;object-fit:contain;">
+    </div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-top">Tamaleria</span>
+      <span class="nav-logo-bottom">Migueleña</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#nosotros">Inicio</a></li>
+    <li><a href="index.html#menu">Menú</a></li>
+    <li><a href="index.html#especialidades">Especialidades</a></li>
+    <li><a href="index.html#locales">Locales</a></li>
+    <li><a href="index.html#pedidos" class="nav-cta">Hacer Pedido</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-bg"></div>
+  <div class="mobile-menu-pattern"></div>
+  
+<button onclick="hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); document.body.style.overflow='';" style="position:absolute;top:1.5rem;right:1.5rem;background:transparent;border:1px solid rgba(245,240,232,0.15);color:rgba(245,240,232,0.5);width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:all 0.3s;">✕</button>
+  <ul class="mobile-nav-links">
+    <li><a href="index.html#nosotros" class="mobile-link">Inicio <span class="mobile-nav-arrow">→</span></a></li>
+    <li><a href="index.html#menu" class="mobile-link">Menú <span class="mobile-nav-arrow">→</span></a></li>
+    <li><a href="index.html#especialidades" class="mobile-link">Especialidades <span class="mobile-nav-arrow">→</span></a></li>
+    <li><a href="index.html#locales" class="mobile-link">Locales <span class="mobile-nav-arrow">→</span></a></li>
+    <li><a href="index.html#pedidos" class="mobile-link">Hacer Pedido <span class="mobile-nav-arrow">→</span></a></li>
+  </ul>
+  <div class="mobile-nav-cta-wrap">
+    <a href="index.html#pedidos" class="mobile-nav-cta mobile-link">Hacer Pedido →</a>
+  </div>
+  <div class="mobile-menu-footer">
+    <a class="mobile-social">Facebook</a>
+    <a class="mobile-social">Instagram</a>
+    <a class="mobile-social">WhatsApp</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="suc-hero">
+  <div class="suc-hero-bg"></div>
+  <div class="suc-hero-pattern"></div>
+  <div class="suc-hero-content">
+    <a href="index.html#locales" class="suc-back">← Volver a locales</a>
+    <div class="suc-tag">📍 Local Principal</div>
+    <h1 class="suc-title">Barrios <span>San Miguel</span></h1>
+  </div>
+</div>
+
+<!-- INFO + MAPA -->
+<div class="suc-body">
+  <div class="suc-info">
+    <div class="suc-info-card">
+      <div class="suc-info-icon">📍</div>
+      <div>
+        <div class="suc-info-label">Dirección</div>
+        <div class="suc-info-val">4a Av. Sur #405, San Miguel, El Salvador</div>
+      </div>
+    </div>
+    <div class="suc-info-card">
+      <div class="suc-info-icon">📞</div>
+      <div>
+        <div class="suc-info-label">Teléfono</div>
+        <div class="suc-info-val">+503 7000-0000</div>
+      </div>
+    </div>
+    <div class="suc-info-card">
+      <div class="suc-info-icon">🕐</div>
+      <div>
+        <div class="suc-info-label">Horario</div>
+        <div class="suc-info-val">Lunes a Viernes: 6:00 AM – 3:00 PM<br>Sábado y Domingo: 6:00 AM – 2:00 PM</div>
+      </div>
+    </div>
+    <div class="suc-info-card">
+      <div class="suc-info-icon">🛵</div>
+      <div>
+        <div class="suc-info-label">Entrega a domicilio</div>
+        <div class="suc-info-val">Todo San Miguel y zonas aledañas</div>
+      </div>
+    </div>
+    <a href="https://maps.google.com/?q=4a+Avenida+Sur+405+San+Miguel+El+Salvador" target="_blank" class="suc-map-btn"><span>Abrir en Google Maps →</span></a>
+  </div>
+  <div class="suc-map">
+    <!-- CAMBIA el src por el link de "Insertar mapa" de Google Maps de este local -->
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30856.37!2d-88.183!3d13.4833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f633b7a1e7f4e99%3A0x1!2sSan+Miguel%2C+El+Salvador!5e0!3m2!1ses!2ssv!4v1" allowfullscreen="" loading="lazy"></iframe>
+  </div>
+</div>
+
+<!-- GALERÍA -->
+<div class="suc-gallery-section">
+  <div class="suc-gallery-title">Galería del <em>local</em></div>
+  <div class="suc-gallery-grid">
+    <!-- Reemplaza cada div con <img src="tu-foto.jpg" style="width:100%;height:100%;object-fit:cover;"> -->
+    <div class="suc-gal-item gal-1"><span>🏪</span><div class="suc-gal-overlay"><span class="suc-gal-label">Fachada del local</span></div></div>
+    <div class="suc-gal-item gal-2"><span>🫔</span><div class="suc-gal-overlay"><span class="suc-gal-label">Nuestros tamales</span></div></div>
+    <div class="suc-gal-item gal-3"><span>🌿</span><div class="suc-gal-overlay"><span class="suc-gal-label">Ingredientes frescos</span></div></div>
+    <div class="suc-gal-item gal-4"><span>♨️</span><div class="suc-gal-overlay"><span class="suc-gal-label">Cocción al vapor</span></div></div>
+    <div class="suc-gal-item gal-5"><span>🥣</span><div class="suc-gal-overlay"><span class="suc-gal-label">Preparación</span></div></div>
+  </div>
+</div>
+
+<!-- CTA PEDIDO -->
+<div class="suc-pedido">
+  <div class="suc-pedido-text">¿Listo para ordenar? <span>Haz tu pedido ahora</span></div>
+  <a href="index.html#pedidos" class="suc-map-btn"><span>Hacer Pedido →</span></a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">MIGUELEÑA</div>
+      <div class="footer-brand-sub">Tamaleria</div>
+      <p class="footer-desc">Más de 28 años llevando el auténtico sabor de los tamales salvadoreños a cada familia.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Locales</div>
+      <ul class="footer-links">
+        <li><a href="barrios.html">Barrios San Miguel</a></li>
+        <li><a href="plazajardin.html">Plaza Jardín</a></li>
+        <li><a href="elencuentro.html">El Encuentro El Sitio</a></li>
+        <li><a href="ciudadreal.html">Ciudad Real</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Navegación</div>
+      <ul class="footer-links">
+        <li><a href="index.html#nosotros">Nuestra Historia</a></li>
+        <li><a href="index.html#menu">Menú</a></li>
+        <li><a href="index.html#especialidades">Especialidades</a></li>
+        <li><a href="index.html#pedidos">Hacer Pedido</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Horarios</div>
+      <ul class="footer-links">
+        <li><a>Lunes a Viernes</a></li>
+        <li><a>6:00 AM – 3:00 PM</a></li>
+        <li><a>Sábado y Domingo</a></li>
+        <li><a>6:00 AM – 2:00 PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-social">
+      <a href="https://www.facebook.com/tamaleriamiguelenasv/?locale=es_LA" class="social-btn" title="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+      <a href="https://www.instagram.com/tamaleriamiguelena/" class="social-btn" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.4)" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="rgba(245,240,232,0.4)"/></svg></a>
+      <a href="https://www.tiktok.com/@tamaleria.miguelena?is_from_webapp=1&sender_device=pc" class="social-btn" title="TikTok"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-6.33 6.34 6.34 6.34 0 006.33 6.34 6.34 6.34 0 006.34-6.34V8.69a8.18 8.18 0 004.78 1.52V6.74a4.85 4.85 0 01-1.01-.05z"/></svg></a>
+      <a href="https://wa.me/50370000000" target="_blank" class="social-btn" title="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/50370000000" class="wa-float" target="_blank">
+  <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+<script src="script.js"></script>
+</body>
+</html>

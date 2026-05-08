@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tamalería Migueleña</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-icon" style="background:transparent;border:none;padding:0;width:48px;height:48px;">
+      <img src="LOGO-TAMALERIA LA MIGUELEÑA.png" style="width:100%;height:100%;object-fit:contain;">
+    </div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-top">Tamaleria</span>
+      <span class="nav-logo-bottom">Migueleña</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#especialidades">Especialidades</a></li>
+    <li><a href="#galeria">Galería</a></li>
+    <li><a href="#locales">Locales</a></li>
+    <li><a href="#testimonios">Testimonios</a></li>
+    <li><a href="#pedidos" class="nav-cta">Hacer Pedido</a></li>
+  </ul>
+  <button onclick="toggleCarrito()" style="position:relative;background:transparent;border:1px solid rgba(77,175,74,0.3);border-radius:4px;padding:0.5rem 1rem;color:var(--verde-claro);cursor:pointer;font-family:'Montserrat',sans-serif;font-size:0.75rem;letter-spacing:1px;">
+    🛒 Carrito
+    <span id="carrito-badge" style="display:none;position:absolute;top:-8px;right:-8px;background:var(--verde-brillante);color:var(--negro);width:20px;height:20px;border-radius:50%;font-size:0.65rem;font-weight:700;align-items:center;justify-content:center;">0</span>
+  </button>
+  <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-bg"></div>
+  <div class="mobile-menu-pattern"></div>
+  <button onclick="hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); document.body.style.overflow='';" style="position:absolute;top:1.5rem;right:1.5rem;background:rgba(26,77,26,0.6);border:1px solid rgba(77,175,74,0.4);color:var(--verde-claro);width:44px;height:44px;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;">✕</button>
+  <ul class="mobile-nav-links">
+    <li><a href="#nosotros" class="mobile-link">Nosotros <span class="mobile-nav-arrow">→</span></a></li>
+    <li><a href="#menu" class="mobile-link">Menú <span class="mobile-nav-arrow">→</span></a></li>
+    <li><a href="#especialidades" class="mobile-link">Especialidades <span class="mobile-nav-arrow">→</span></a></li>
+    <li><a href="#galeria" class="mobile-link">Galería <span class="mobile-nav-arrow">→</span></a></li>
+    <li><a href="#locales" class="mobile-link">Locales <span class="mobile-nav-arrow">→</span></a></li>
+    <li><a href="#testimonios" class="mobile-link">Testimonios <span class="mobile-nav-arrow">→</span></a></li>
+  </ul>
+  <div class="mobile-nav-cta-wrap">
+    <a href="#pedidos" class="mobile-nav-cta mobile-link">Hacer Pedido →</a>
+  </div>
+  <div class="mobile-menu-footer">
+    <a href="https://www.facebook.com/tamaleriamiguelenasv/?locale=es_LA" target="_blank" class="mobile-social">Facebook</a>
+    <a href="https://www.instagram.com/tamaleriamiguelena/" target="_blank" class="mobile-social">Instagram</a>
+    <a href="https://www.tiktok.com/@tamaleria.miguelena?is_from_webapp=1&sender_device=pc" target="_blank" class="mobile-social">TikTok</a>
+    <a href="https://wa.me/50370000000" target="_blank" class="mobile-social">WhatsApp</a>
+  </div>
+</div>
+
+<!-- CARRITO -->
+<div id="carrito-panel" style="position:fixed;top:0;right:-420px;width:380px;max-width:95vw;height:100vh;background:#0d0d0d;border-left:1px solid rgba(77,175,74,0.2);z-index:2000;padding:2rem 1.5rem;display:flex;flex-direction:column;gap:1rem;transition:right 0.4s cubic-bezier(.23,1,.32,1);overflow-y:auto;">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--blanco);font-weight:700;">Tu Pedido</div>
+    <button onclick="toggleCarrito()" style="background:transparent;border:none;color:rgba(245,240,232,0.5);font-size:1.5rem;cursor:pointer;">✕</button>
+  </div>
+  <div id="carrito-vacio" style="text-align:center;padding:2rem 0;color:rgba(245,240,232,0.3);font-size:0.88rem;">Tu carrito está vacío.<br>Agrega tamales desde el menú.</div>
+  <div id="carrito-lista"></div>
+  <div style="border-top:1px solid rgba(77,175,74,0.2);padding-top:1rem;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,0.5);">Total</span>
+    <span id="carrito-total" style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--verde-claro);font-weight:700;">$0.00</span>
+  </div>
+ <button id="carrito-btn" onclick="toggleCarrito(); document.getElementById('pedidos').scrollIntoView({behavior:'smooth'});" style="width:100%;padding:1.1rem;background:var(--verde-medio);border:none;color:var(--crema);font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;opacity:0.4;pointer-events:none;">
+    Terminar Pedido →
+  </button>
+</div>
+<div id="carrito-overlay" onclick="toggleCarrito()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1999;"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Los expertos en tamales desde 1996</span>
+    </div>
+    <p class="hero-tagline">La auténtica sabor de</p>
+    <h1 class="hero-title">
+      Tamaleria<br>
+      <span>Migueleña</span>
+    </h1>
+    <p class="hero-desc">Elaborados con maíz seleccionado, recetas de generación en generación y el amor que solo una familia puede poner en cada tamal.</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn-primary"><span>Ver Menú</span></a>
+      <a href="#pedidos" class="btn-outline">Hacer Pedido</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-tamale-art">
+      <div class="circle-deco"></div>
+      <div class="circle-deco"></div>
+      <div class="circle-deco"></div>
+      <div class="hero-logo-big">
+        <img src="LOGO-TAMALERIA LA MIGUELEÑA.png" alt="Tamalería Migueleña" class="pot-illustration" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\'font-size:8rem;text-align:center\'>🫔</div>'">
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    <div class="strip-item"><div class="strip-dot"></div>Tamales de Pollo</div>
+    <div class="strip-item"><div class="strip-dot"></div>Tamales de Puerco</div>
+    <div class="strip-item"><div class="strip-dot"></div>Tamales de Frijol</div>
+    <div class="strip-item"><div class="strip-dot"></div>Tamales de Rajas</div>
+    <div class="strip-item"><div class="strip-dot"></div>Tamales Dulces</div>
+    <div class="strip-item"><div class="strip-dot"></div>Pedidos al por Mayor</div>
+    <div class="strip-item"><div class="strip-dot"></div>Entrega a Domicilio</div>
+    <div class="strip-item"><div class="strip-dot"></div>Tamales de Pollo</div>
+    <div class="strip-item"><div class="strip-dot"></div>Tamales de Puerco</div>
+    <div class="strip-item"><div class="strip-dot"></div>Tamales de Frijol</div>
+    <div class="strip-item"><div class="strip-dot"></div>Tamales de Rajas</div>
+    <div class="strip-item"><div class="strip-dot"></div>Tamales Dulces</div>
+    <div class="strip-item"><div class="strip-dot"></div>Pedidos al por Mayor</div>
+    <div class="strip-item"><div class="strip-dot"></div>Entrega a Domicilio</div>
+  </div>
+</div>
+
+<!-- NOSOTROS -->
+<section id="nosotros">
+  <div class="nosotros-image-wrapper reveal">
+    <div class="nosotros-img-main">
+      <img src="LOGO-TAMALERIA LA MIGUELEÑA.png" alt="Logo" style="width:70%;filter:drop-shadow(0 20px 60px rgba(0,0,0,0.6))" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<div style=\'font-size:7rem\'>🫔</div>')">
+    </div>
+    <div class="nosotros-accent-card">
+      <div class="nosotros-accent-num">28+</div>
+      <div class="nosotros-accent-text">Años de tradición familiar</div>
+    </div>
+  </div>
+  <div class="nosotros-text reveal">
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text">Nuestra Historia</span>
+    </div>
+    <h2 class="section-title">Sabor que <em>trasciende</em> generaciones</h2>
+    <p style="margin-top:1.5rem">La Tamalería Migueleña nació en San Miguel con el sueño de preservar la auténtica receta de los tamales salvadoreños. Desde 1996, nuestra familia ha trabajado con dedicación para ofrecerte el mejor tamal de la región.</p>
+    <p>Cada tamal es elaborado a mano, con ingredientes frescos seleccionados diariamente. Nuestro maíz nixtamalizado, nuestras especias y nuestro relleno son el secreto de un sabor que no encontrarás en ningún otro lugar.</p>
+    <div class="nosotros-values">
+      <div class="valor">
+        <div class="valor-title">Tradición</div>
+        <div class="valor-desc">Recetas familiares auténticas</div>
+      </div>
+      <div class="valor">
+        <div class="valor-title">Calidad</div>
+        <div class="valor-desc">Ingredientes frescos diarios</div>
+      </div>
+      <div class="valor">
+        <div class="valor-title">Artesanal</div>
+        <div class="valor-desc">Elaborados 100% a mano</div>
+      </div>
+      <div class="valor">
+        <div class="valor-title">Sabor</div>
+        <div class="valor-desc">Receta original de 1996</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENÚ -->
+<section id="menu">
+  <div class="menu-header">
+    <div>
+      <div class="section-label">
+        <div class="section-label-line"></div>
+        <span class="section-label-text">Nuestro Menú</span>
+      </div>
+      <h2 class="section-title">Elige tu <em>favorito</em></h2>
+    </div>
+    <div class="menu-filters">
+      <button class="filter-btn active">Todos</button>
+      <button class="filter-btn">Salados</button>
+      <button class="filter-btn">Dulces</button>
+      <button class="filter-btn">Especiales</button>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item reveal">
+      <span class="menu-icon">🍗</span>
+      <div class="menu-item-top">
+        <span class="menu-badge">Más Popular</span>
+        <span class="menu-price">$0.75</span>
+      </div>
+      <div class="menu-name">Tamal de Pollo</div>
+      <div class="menu-desc">Masa de maíz suave rellena de pollo guisado en salsa criolla con chile y especias. Envuelto en hoja de plátano.</div>
+    <button class="btn-agregar" onclick="agregarAlCarrito('Tamal de Pollo',0.75)">+ Agregar al carrito</button>
+    </div>
+    <div class="menu-item reveal">
+      <span class="menu-icon">🥩</span>
+      <div class="menu-item-top">
+        <span class="menu-badge">Tradicional</span>
+        <span class="menu-price">$0.75</span>
+      </div>
+      <div class="menu-name">Tamal de Puerco</div>
+      <div class="menu-desc">Cerdo marinado con achiote, especias y chile guaque. Una explosión de sabor con cada mordida.</div>
+    <button class="btn-agregar" onclick="agregarAlCarrito('Tamal de Pollo',0.75)">+ Agregar al carrito</button>
+    </div>
+    <div class="menu-item reveal">
+      <span class="menu-icon">🌿</span>
+      <div class="menu-item-top">
+        <span class="menu-badge">Vegetariano</span>
+        <span class="menu-price">$0.60</span>
+      </div>
+      <div class="menu-name">Tamal de Frijol</div>
+      <div class="menu-desc">Frijoles negros refritos con queso fresco y chile verde. La opción perfecta para los amantes de lo natural.</div>
+    <button class="btn-agregar" onclick="agregarAlCarrito('Tamal de Pollo',0.75)">+ Agregar al carrito</button>
+    </div>
+    <div class="menu-item reveal">
+      <span class="menu-icon">🌶️</span>
+      <div class="menu-item-top">
+        <span class="menu-badge">Especial</span>
+        <span class="menu-price">$0.85</span>
+      </div>
+      <div class="menu-name">Tamal de Rajas</div>
+      <div class="menu-desc">Rajas de chile poblano con crema y queso Oaxaca. Un sabor cremoso y ligeramente picante que encanta.</div>
+    <button class="btn-agregar" onclick="agregarAlCarrito('Tamal de Pollo',0.75)">+ Agregar al carrito</button>
+    </div>
+    <div class="menu-item reveal">
+      <span class="menu-icon">🍬</span>
+      <div class="menu-item-top">
+        <span class="menu-badge">Dulce</span>
+        <span class="menu-price">$0.65</span>
+      </div>
+      <div class="menu-name">Tamal Dulce</div>
+      <div class="menu-desc">Masa dulce con pasas, canela y azúcar. El postre perfecto o el acompañante ideal para el café.</div>
+    <button class="btn-agregar" onclick="agregarAlCarrito('Tamal de Pollo',0.75)">+ Agregar al carrito</button>
+    </div>
+    <div class="menu-item reveal">
+      <span class="menu-icon">🫔</span>
+      <div class="menu-item-top">
+        <span class="menu-badge">Mixto</span>
+        <span class="menu-price">$8.50</span>
+      </div>
+      <div class="menu-name">Docena Surtida</div>
+      <div class="menu-desc">12 tamales de tu selección. La opción perfecta para celebraciones, reuniones y pedidos familiares.</div>
+      <button class="btn-agregar" onclick="agregarAlCarrito('Tamal de Pollo',0.75)">+ Agregar al carrito</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESPECIALIDADES -->
+<section id="especialidades">
+  <div class="esp-bg"></div>
+  <div class="section-label reveal">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">Lo Mejor de la Casa</span>
+  </div>
+  <h2 class="section-title reveal">Especialidades <em>únicas</em></h2>
+  <div class="esp-grid">
+    <div class="esp-card reveal">
+      <div class="esp-number">01</div>
+      <div class="esp-tag">Exclusivo</div>
+      <div class="esp-name">Tamal Migueleño Especial</div>
+      <div class="esp-desc">Nuestra receta estrella. Pollo y puerco combinados con aceitunas, alcaparras y chile, en una masa perfumada con achiote de primera.</div>
+      <div class="esp-price">Desde $1.00 c/u</div>
+    </div>
+    <div class="esp-card featured reveal">
+      <div class="esp-number">02</div>
+      <div class="esp-tag">Chef's Choice</div>
+      <div class="esp-name">El Gran Migueleño</div>
+      <div class="esp-desc">Nuestro tamal más grande y generoso. Doble relleno, doble hoja y doble sabor. Para cuando quieres lo mejor de lo mejor, directamente de nuestra cocina a tu mesa.</div>
+      <div class="esp-price">Desde $1.50 c/u</div>
+    </div>
+    <div class="esp-card reveal">
+      <div class="esp-number">03</div>
+      <div class="esp-tag">Temporada</div>
+      <div class="esp-name">Tamal Navideño</div>
+      <div class="esp-desc">Elaborado con ingredientes de temporada. Una tradición que no puede faltar en la mesa navideña salvadoreña.</div>
+      <div class="esp-price">Solo en temporada</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso">
+  <div class="proceso-header">
+    <div class="section-label" style="justify-content:center">
+      <div class="section-label-line"></div>
+      <span class="section-label-text">Nuestro Proceso</span>
+      <div class="section-label-line"></div>
+    </div>
+    <h2 class="section-title reveal">Del campo a <em>tu mesa</em></h2>
+  </div>
+  <div class="proceso-steps">
+    <div class="paso reveal">
+      <div class="paso-num">01</div>
+      <div class="paso-title">Selección</div>
+      <div class="paso-desc">Elegimos el mejor maíz y los ingredientes más frescos cada mañana en el mercado local.</div>
+    </div>
+    <div class="paso reveal">
+      <div class="paso-num">02</div>
+      <div class="paso-title">Preparación</div>
+      <div class="paso-desc">La masa se nixtamaliza y se mezcla con nuestras especias secretas de familia.</div>
+    </div>
+    <div class="paso reveal">
+      <div class="paso-num">03</div>
+      <div class="paso-title">Elaboración</div>
+      <div class="paso-desc">Cada tamal se arma a mano con amor y cuidado, envuelto en hoja de plátano fresca.</div>
+    </div>
+    <div class="paso reveal">
+      <div class="paso-num">04</div>
+      <div class="paso-title">Cocción</div>
+      <div class="paso-desc">Se cocinan al vapor durante horas hasta lograr la textura perfecta, lista para disfrutar.</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section id="galeria">
+  <div class="section-label reveal">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">Galería</span>
+  </div>
+  <h2 class="section-title reveal">El arte de <em>la tamalería</em></h2>
+  <div class="galeria-grid reveal">
+    <div class="gal-item">
+      <div class="gal-placeholder gal-1">🫔</div>
+      <div class="gal-overlay"><span class="gal-label">Tamales Artesanales</span></div>
+    </div>
+    <div class="gal-item">
+      <div class="gal-placeholder gal-2">🌿</div>
+      <div class="gal-overlay"><span class="gal-label">Hojas Naturales</span></div>
+    </div>
+    <div class="gal-item">
+      <div class="gal-placeholder gal-3">🥣</div>
+      <div class="gal-overlay"><span class="gal-label">Masa Artesanal</span></div>
+    </div>
+    <div class="gal-item">
+      <div class="gal-placeholder gal-4">🍗</div>
+      <div class="gal-overlay"><span class="gal-label">Relleno Selecto</span></div>
+    </div>
+    <div class="gal-item">
+      <div class="gal-placeholder gal-5">♨️</div>
+      <div class="gal-overlay"><span class="gal-label">Cocción al Vapor</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="test-header">
+    <div class="section-label" style="justify-content:center">
+      <div class="section-label-line"></div>
+      <span class="section-label-text">Opiniones</span>
+      <div class="section-label-line"></div>
+    </div>
+    <h2 class="section-title reveal">Lo que dicen <em>nuestros clientes</em></h2>
+  </div>
+  <div class="test-grid">
+    <div class="test-card reveal">
+      <div class="test-quote">"</div>
+      <p class="test-text">Los mejores tamales que he probado en toda mi vida. La masa es suave, el relleno abundante y el sabor te transporta directo a la cocina de la abuela.</p>
+      <div class="test-author">
+        <div class="test-avatar">MR</div>
+        <div>
+          <div class="test-name">María Rodríguez</div>
+          <div class="test-stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card reveal">
+      <div class="test-quote">"</div>
+      <p class="test-text">Pedí 5 docenas para la fiesta y todos quedaron encantados. El servicio fue rápido y los tamales llegaron perfectos. Definitivamente volvemos.</p>
+      <div class="test-author">
+        <div class="test-avatar">JC</div>
+        <div>
+          <div class="test-name">José Carlos Mejía</div>
+          <div class="test-stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card reveal">
+      <div class="test-quote">"</div>
+      <p class="test-text">El tamal migueleño especial es una obra de arte. Nunca pensé que un tamal podría tenerme tan enamorada. La Tamalería Migueleña es mi lugar favorito.</p>
+      <div class="test-author">
+        <div class="test-avatar">AL</div>
+        <div>
+          <div class="test-name">Ana Lucía Flores</div>
+          <div class="test-stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCALES -->
+<section id="locales">
+  <div class="section-label reveal">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">Encuéntranos</span>
+  </div>
+  <h2 class="section-title reveal">Nuestros <em>locales</em></h2>
+  <p class="reveal" style="margin-top:1rem;font-size:0.95rem;color:rgba(245,240,232,0.55);max-width:560px;">Visítanos en cualquiera de nuestros puntos de venta en San Miguel.</p>
+<div class="locales-grid">
+    <a href="barrios.html" class="local-card reveal" style="text-decoration:none;">
+      <div class="local-tag">📍 Casa Matriz</div>
+      <div class="local-name">Barrios San Miguel</div>
+      <div class="local-addr">4 Av. Sur #405 Barrio El Calvario a la par del Super Selectos Barrios</div>
+      <div style="margin-top:0.8rem;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--verde-brillante);">Ver local →</div>
+    </a>
+    <a href="plazajardin.html" class="local-card reveal" style="text-decoration:none;">
+      <div class="local-tag">🏪 Sucursal</div>
+      <div class="local-name">Plaza Jardín</div>
+      <div class="local-addr">Av. Roosevelt, Calle Los Almendros, Plaza Jardín Local #1, a la salida de Super Selectos</div>
+      <div style="margin-top:0.8rem;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--verde-brillante);">Ver local →</div>
+    </a>
+    <a href="elencuentro.html" class="local-card reveal" style="text-decoration:none;">
+      <div class="local-tag">🏪 Sucursal</div>
+      <div class="local-name">El Encuentro El Sitio</div>
+      <div class="local-addr">C.C El Encuentro El Sitio Food Court, San Miguel</div>
+      <div style="margin-top:0.8rem;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--verde-brillante);">Ver local →</div>
+    </a>
+    <a href="ciudadreal.html" class="local-card reveal" style="text-decoration:none;">
+      <div class="local-tag">🏪 Sucursal</div>
+      <div class="local-name">Ciudad Real</div>
+      <div class="local-addr">FR4P+W7H, C. Elizabeth, San Miguel</div>
+      <div style="margin-top:0.8rem;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--verde-brillante);">Ver local →</div>
+    </a>
+  </div>
+  <div class="locales-extras">
+    <a href="#pedidos" class="extra-card reveal" style="text-decoration:none;cursor:pointer;">
+      <div class="extra-icon">🛵</div>
+      <div>
+        <div class="extra-label">Entrega a domicilio</div>
+        <div class="extra-value">Todo San Miguel y zonas aledañas</div>
+        <div class="extra-note">Pedidos con 24 hrs de anticipación</div>
+      </div>
+    </a>
+    <a href="https://www.pedidosyasv.com.sv/restaurantes/san-miguel/tamaleria-miguelena-menu?origin=shop_list" target="_blank" class="extra-card highlight reveal" style="text-decoration:none;cursor:pointer;">
+      <div class="extra-icon">📱</div>
+      <div>
+        <div class="extra-label">Pedidos en línea</div>
+        <div class="extra-value">App <span class="ya-badge">YA</span></div>
+        <div class="extra-note">Descárgala y ordena desde donde estés</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- PEDIDOS -->
+<section id="pedidos">
+  <div class="pedidos-bg"></div>
+  <div class="pedidos-content">
+    <div class="pedido-info">
+      <div class="section-label reveal">
+        <div class="section-label-line"></div>
+        <span class="section-label-text">Contáctanos</span>
+      </div>
+      <h2 class="section-title reveal">Haz tu <em>pedido</em> ahora</h2>
+      <p style="margin-top:1.5rem" class="reveal">Recibimos pedidos con 24 horas de anticipación. Para eventos y celebraciones, contáctanos con más tiempo para garantizar tu pedido.</p>
+      <div class="contact-items reveal">
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">Teléfono</div>
+            <div class="contact-value">+503 7000-0000</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">Local Principal</div>
+            <div class="contact-value">4a Av. Sur #405, San Miguel</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div>
+            <div class="contact-label">Horario</div>
+            <div class="contact-value">Lun–Dom: 6:00 AM – 3:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pedido-form reveal">
+      <div class="form-title">Solicitar Pedido</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" placeholder="Tu nombre completo">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" placeholder="+503 0000-0000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tipo de entrega</label>
+        <div class="entrega-opts">
+          <div class="entrega-opt" data-val="domicilio" onclick="selectEntrega(this)">
+            <span class="entrega-opt-icon">🛵</span>
+            <div>
+              <div class="entrega-opt-title">A domicilio</div>
+              <div class="entrega-opt-sub">Todo San Miguel</div>
+            </div>
+          </div>
+          <div class="entrega-opt" data-val="local" onclick="selectEntrega(this)">
+            <span class="entrega-opt-icon">🏪</span>
+            <div>
+              <div class="entrega-opt-title">Recoger en local</div>
+              <div class="entrega-opt-sub">4 sucursales</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" id="campo-direccion" style="display:none;">
+        <label>Dirección de entrega</label>
+        <input type="text" placeholder="Colonia, calle, referencia...">
+        <div class="form-hint">✓ Entregamos en todo San Miguel y zonas aledañas</div>
+      </div>
+      <div class="form-group" id="campo-local" style="display:none;">
+        <label>Selecciona el local</label>
+        <select>
+          <option value="">Elige tu sucursal</option>
+          <option>Barrios San Miguel — 4a Av. Sur #405</option>
+          <option>Plaza Jardín</option>
+          <option>El Encuentro El Sitio</option>
+          <option>Ciudad Real</option>
+        </select>
+      </div>
+    <!-- RESUMEN DEL CARRITO -->
+      <div class="form-group" id="resumen-carrito-form" style="background:rgba(77,175,74,0.05);border:1px solid rgba(77,175,74,0.2);border-radius:4px;padding:1rem;">
+        <div style="font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--verde-claro);font-weight:600;margin-bottom:0.8rem;">🛒 Tu pedido</div>
+        <div id="resumen-items" style="font-size:0.85rem;color:var(--crema);"></div>
+        <div style="border-top:1px solid rgba(77,175,74,0.2);margin-top:0.8rem;padding-top:0.8rem;display:flex;justify-content:space-between;">
+          <span style="font-size:0.8rem;color:rgba(245,240,232,0.5);">Total</span>
+          <span id="resumen-total" style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--verde-claro);font-weight:700;">$0.00</span>
+        </div>
+      </div>
+        <div class="form-group">
+          <label>Fecha de Entrega</label>
+          <input type="date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Notas adicionales <span style="color:rgba(245,240,232,0.3);font-size:0.65rem;letter-spacing:1px;">(opcional)</span></label>
+        <textarea placeholder="Indicaciones especiales..."></textarea>
+      </div>
+      <button class="btn-form"><span>Enviar Pedido →</span></button>
+      <div class="form-app-note">También puedes pedir desde la app <span>YA</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">MIGUELEÑA</div>
+      <div class="footer-brand-sub">Tamaleria</div>
+      <p class="footer-desc">Más de 28 años llevando el auténtico sabor de los tamales salvadoreños a cada familia. Tradición, calidad y amor en cada tamal.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Menú</div>
+      <ul class="footer-links">
+        <li><a href="#menu">Tamales de Pollo</a></li>
+        <li><a href="#menu">Tamales de Puerco</a></li>
+        <li><a href="#menu">Tamales de Frijol</a></li>
+        <li><a href="#menu">Tamales Dulces</a></li>
+        <li><a href="#especialidades">Especialidades</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Navegación</div>
+      <ul class="footer-links">
+        <li><a href="#nosotros">Nuestra Historia</a></li>
+        <li><a href="#proceso">Nuestro Proceso</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#locales">Nuestros Locales</a></li>
+        <li><a href="#pedidos">Hacer Pedido</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Horarios</div>
+      <ul class="footer-links">
+        <li><a>Lunes a Viernes</a></li>
+        <li><a>6:00 AM – 3:00 PM</a></li>
+        <li><a>Sábado y Domingo</a></li>
+        <li><a>6:00 AM – 2:00 PM</a></li>
+        <li><a style="color:var(--verde-claro)">Pedidos 24 hrs antes</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-social">
+  <a href="https://www.facebook.com/tamaleriamiguelenasv/?locale=es_LA" target="_blank" class="social-btn" title="Facebook">
+    <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+  </a>
+  <a href="https://www.instagram.com/tamaleriamiguelena/" target="_blank" class="social-btn" title="Instagram">
+    <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+  </a>
+  <a href="https://www.tiktok.com/@tamaleria.miguelena?is_from_webapp=1&sender_device=pc" target="_blank" class="social-btn" title="TikTok">
+    <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-6.33 6.34 6.34 6.34 0 006.33 6.34 6.34 6.34 0 006.34-6.34V8.69a8.18 8.18 0 004.78 1.52V6.74a4.85 4.85 0 01-1.01-.05z"/></svg>
+  </a>
+  <a href="https://wa.me/50370000000" target="_blank" class="social-btn" title="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/50370000000" class="wa-float" target="_blank" title="Pedir por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
