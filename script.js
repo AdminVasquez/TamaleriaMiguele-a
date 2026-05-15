@@ -173,6 +173,8 @@ document.querySelector('.btn-form').addEventListener('click', function () {
     if (!loc) { alert('Por favor selecciona el local donde recogerás.'); return; }
   }
   if (carrito.length === 0) { alert('Tu carrito está vacío. Agrega productos desde el menú.'); return; }
+  const notas = document.querySelector('textarea').value.trim();
+  if (!notas) { alert('Por favor describe tu pedido en el campo de descripción.'); return; }
   if (!fecha) { alert('Por favor selecciona la fecha de entrega.'); return; }
 
   const entregaTipo = entrega.querySelector('.entrega-opt-title').innerText;
@@ -180,7 +182,6 @@ document.querySelector('.btn-form').addEventListener('click', function () {
                       ? document.getElementById('campo-direccion').querySelector('input').value : '';
   const local       = entrega.getAttribute('data-val') === 'local'
                       ? document.getElementById('campo-local').querySelector('select').value : '';
-  const notas       = document.querySelector('textarea').value || 'Ninguna';
   const lugar       = entregaTipo === 'A domicilio' ? `📍 Dirección: ${direccion}` : `🏪 Local: ${local}`;
   const items       = carrito.map(i => `• ${i.nombre} x${i.cantidad} — $${(i.precio * i.cantidad).toFixed(2)}`).join('\n');
   const total       = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
